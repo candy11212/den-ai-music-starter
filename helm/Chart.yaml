@@ -1,0 +1,6 @@
+apiVersion: v2
+name: den-ai-music
+description: Helm chart for den-ai-music-starter
+type: application
+version: 0.1.0
+appVersion: "1.0"

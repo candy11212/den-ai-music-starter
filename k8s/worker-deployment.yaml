@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-music-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ai-music-worker
+  template:
+    metadata:
+      labels:
+        app: ai-music-worker
+    spec:
+      nodeSelector:
+        cloud.google.com/gke-accelerator: "nvidia-tesla-t4"
+      containers:
+        - name: worker
+          image: ghcr.io/candy11212/den-ai-music-starter/backend:latest
+          command: ["node","dist/worker.js"]
+          envFrom:
+            - secretRef:
+                name: ai-music-secrets
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+            requests:
+              cpu: "500m"
+              memory: "1Gi"

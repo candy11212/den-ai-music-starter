@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-music-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ai-music-frontend
+  template:
+    metadata:
+      labels:
+        app: ai-music-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: ghcr.io/candy11212/den-ai-music-starter/frontend:latest
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: ai-music-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-music-frontend
+spec:
+  selector:
+    app: ai-music-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
