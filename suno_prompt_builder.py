@@ -95,6 +95,40 @@ class OmegaInput:
     language: str
 
 
+@dataclass
+class StylePromptInput:
+    reference: str
+    mood: str
+    language: str
+    length: int
+    dark_theme: bool
+
+
+def build_style_prompt_text(data: StylePromptInput) -> str:
+    base = (
+        f"Cinematic dark rock ballad with gothic NDH edge, inspired by the emotional gravity of {data.reference}. "
+        f"Theme: {data.mood}. Male baritone lead with intimate verses and a massive, life-affirming chorus. "
+        "Start minimal with piano, low drones, distant choir textures, and soft heartbeat-like percussion; "
+        "build into wide guitars, deep toms, and warm orchestral pads. "
+        "Keep the tone sincere, human, and dramatic: grief transformed into strength, memory into purpose. "
+        "Use vivid imagery of rain, stone, night, graves, and dawn. "
+        "Arc: fragile intro -> confessional verse -> anthemic chorus -> reflective bridge -> cathartic final chorus. "
+        "Production feel: warm mids, controlled low end, clear vocal center, cinematic width in refrain, and emotional lift without cheesy phrasing. "
+    )
+    if data.dark_theme:
+        base += "Darker emphasis: funeral atmosphere, heavy silence, bell-like motifs, and restrained industrial pulse. "
+    if data.language.lower().startswith('de'):
+        base += "Language direction: German lyrics, poetic but direct, strong hook phrasing. "
+    elif data.language.lower().startswith('nl'):
+        base += "Language direction: Dutch lyrics, direct emotional storytelling with poetic imagery. "
+    else:
+        base += "Language direction: English lyrics, concise and memorable hook lines. "
+
+    target = max(300, min(1400, data.length))
+    text = (base * ((target // len(base)) + 2))[:target]
+    return text.rstrip()
+
+
 def build_songwriter_report(data: SongwriterInput) -> str:
     lyrics_en = """[Verse 1]
 In the rain-lit glass I hear your name
@@ -548,6 +582,13 @@ def parse_args() -> argparse.Namespace:
     omega.add_argument("--export-goal", default="streaming + storytelling")
     omega.add_argument("--language", default="en")
 
+    styleprompt = sub.add_parser("styleprompt", help="Generate a clean Suno style prompt text")
+    styleprompt.add_argument("--reference", default="Unheilig - Geboren um zu leben")
+    styleprompt.add_argument("--mood", default="grief to strength")
+    styleprompt.add_argument("--language", default="de")
+    styleprompt.add_argument("--length", type=int, default=1000)
+    styleprompt.add_argument("--dark-theme", action="store_true")
+
     return parser.parse_args()
 
 
@@ -612,6 +653,20 @@ def main() -> None:
                     image=args.image,
                     export_goal=args.export_goal,
                     language=args.language,
+                )
+            )
+        )
+        return
+
+    if args.command == "styleprompt":
+        print(
+            build_style_prompt_text(
+                StylePromptInput(
+                    reference=args.reference,
+                    mood=args.mood,
+                    language=args.language,
+                    length=args.length,
+                    dark_theme=args.dark_theme,
                 )
             )
         )
