@@ -83,6 +83,18 @@ class SongwriterInput:
     language: str
 
 
+@dataclass
+class OmegaInput:
+    mood: str
+    emotion: str
+    vocal: str
+    style: str
+    tempo: str
+    image: str
+    export_goal: str
+    language: str
+
+
 def build_songwriter_report(data: SongwriterInput) -> str:
     lyrics_en = """[Verse 1]
 In the rain-lit glass I hear your name
@@ -387,6 +399,54 @@ def build_producer_direction(data: ProducerInput) -> str:
     )
 
 
+
+
+def build_omega_system_output(data: OmegaInput) -> str:
+    aurion = build_aurion_prompt(
+        AurionInput(
+            description=f"{data.mood}, {data.style}, {data.image}",
+            style_hint=f"{data.style} met {data.emotion} emotionele kern",
+            vocal_direction=f"{data.vocal}, emotie: {data.emotion}, tempo-feel: {data.tempo}",
+            language=data.language,
+        )
+    )
+    mixboard = "\n".join(
+        [
+            "V∞ OMEGA MIXBOARD",
+            f"Celestial: shine layer shaped by {data.mood}",
+            f"Heartline: mid emotional core driven by {data.emotion}",
+            f"Sub Foundation: bass gravity matched to {data.tempo}",
+            f"Vocal Shape: {data.vocal}",
+            f"Texture Direction: {data.style}",
+            f"Image Translation: {data.image}",
+        ]
+    )
+    sentivox = build_mastering_report(
+        track_desc=f"{data.style} / {data.mood} / {data.emotion}",
+        style_hint=f"Export intent: {data.export_goal}",
+    )
+    return "\n".join(
+        [
+            "OMEGA MUSIC SYSTEM — COMPLETE OUTPUT",
+            "1) AURION WORLD + LYRICS",
+            aurion,
+            "",
+            "2) OMEGA MIXBOARD ARCHITECTURE",
+            mixboard,
+            "",
+            "3) SENTIVOX CONCEPTUAL MASTERING",
+            sentivox,
+            "",
+            "4) OMEGA SUMMARY",
+            f"Mood: {data.mood}",
+            f"Emotion Curve: Shadow -> Glow ({data.emotion})",
+            f"Style: {data.style}",
+            f"Vocal Soul: {data.vocal}",
+            f"Visual Frame: {data.image}",
+            f"Export Goal: {data.export_goal}",
+        ]
+    )
+
 def ask(question: str, default: str) -> str:
     raw = input(f"{question} [{default}]: ").strip()
     return raw or default
@@ -474,6 +534,17 @@ def parse_args() -> argparse.Namespace:
     songwriter.add_argument("--theme", default="post-love recovery")
     songwriter.add_argument("--language", default="en")
 
+
+    omega = sub.add_parser("omega", help="OMEGA system: aurion + mixboard + sentivox")
+    omega.add_argument("--mood", default="neon rain city")
+    omega.add_argument("--emotion", default="melancholic hope")
+    omega.add_argument("--vocal", default="androgynous intimate whisper")
+    omega.add_argument("--style", default="glitchy synthwave cinematic")
+    omega.add_argument("--tempo", default="mid-slow pulse")
+    omega.add_argument("--image", default="time-fracture skyline in rain")
+    omega.add_argument("--export-goal", default="streaming + storytelling")
+    omega.add_argument("--language", default="en")
+
     return parser.parse_args()
 
 
@@ -523,6 +594,24 @@ def main() -> None:
 
     if args.command == "songwriter":
         print(build_songwriter_report(SongwriterInput(args.emotion, args.scene, args.vocal, args.theme, args.language)))
+        return
+
+
+    if args.command == "omega":
+        print(
+            build_omega_system_output(
+                OmegaInput(
+                    mood=args.mood,
+                    emotion=args.emotion,
+                    vocal=args.vocal,
+                    style=args.style,
+                    tempo=args.tempo,
+                    image=args.image,
+                    export_goal=args.export_goal,
+                    language=args.language,
+                )
+            )
+        )
         return
 
     if args.command == "suno":

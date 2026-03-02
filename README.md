@@ -3,7 +3,7 @@ Starter web app for AI music generation — backend + frontend, job queue, and p
 
 ## Extra tool in deze repo
 
-Naast de starter-app bevat deze repo ook `suno_prompt_builder.py` met 11 CLI-modi:
+Naast de starter-app bevat deze repo ook `suno_prompt_builder.py` met 12 CLI-modi:
 
 1. `suno` → korte Suno-vriendelijke prompt
 2. `mastering` → SENTIVOX/V5 mastering report
@@ -16,6 +16,7 @@ Naast de starter-app bevat deze repo ook `suno_prompt_builder.py` met 11 CLI-mod
 9. `abtest` → A/B-vergelijking van vocal approaches
 10. `producer` → V222 production direction output
 11. `songwriter` → V222 songwriter reality-architect output
+12. `omega` → OMEGA system (AURION + MIXBOARD + SENTIVOX)
 
 ### V555 SENTIVOX voorbeeld
 
@@ -33,3 +34,17 @@ De `sentivox` output gebruikt altijd:
 - `[VOCAL MAP]`
 - `[ALTERNATIVES]`
 - `[SELF-OPTIMIZATION]`
+
+
+### OMEGA voorbeeld
+
+```bash
+python suno_prompt_builder.py omega \
+  --mood "neon rain city" \
+  --emotion "melancholic hope" \
+  --vocal "androgynous intimate whisper" \
+  --style "glitchy synthwave cinematic" \
+  --tempo "mid-slow pulse" \
+  --image "time-fracture skyline in rain" \
+  --export-goal "streaming + storytelling"
+```
