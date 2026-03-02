@@ -1,36 +1,38 @@
 # Suno.ai Prompt Builder
 
-Een professionele **high-class prompt builder** voor Suno.ai.
+Een professionele **AI prompt builder** voor Suno.ai.
 
-## Waarom deze versie beter is
+## Wat is nu echt “AI” aan deze builder?
 
-- Schrijft expliciet een **AI STYLE BRIEF (Suno)**.
-- Neemt nu bewust **keys/toonsoort** en **octaves** mee in de prompt.
-- Houdt de prompt compact, premium en direct bruikbaar.
+Deze versie doet meer dan een vaste template:
+- Je geeft alleen een **band/groep** op.
+- De builder gebruikt een **band-profiel analyse** om automatisch stijlvoorstellen te doen (genre, mood, energy, pace, key, octave, vocals, language, theme, production).
+- Je kunt alles nog handmatig overschrijven met flags.
+
+Dus: eerst slimme suggestie op basis van band, daarna controle door jou.
 
 ## Gebruik
 
-### Interactief
+### 1) Alleen band (AI-suggesties)
 
 ```bash
-python suno_prompt_builder.py
+python suno_prompt_builder.py --band "Linkin Park"
 ```
 
-### Snel via command-line
+### 2) Band + eigen overrides
 
 ```bash
 python suno_prompt_builder.py \
   --band "Imagine Dragons" \
-  --genre "cinematic pop-rock" \
   --mood "epic and uplifting" \
-  --energy "high" \
-  --pace "fast and driving" \
   --key "D minor" \
-  --octave "mid-to-high (3-5)" \
-  --vocals "strong male lead with gang vocals in chorus" \
-  --language "English" \
-  --theme "chasing impossible dreams" \
-  --production "punchy drums, wide synth bass, layered guitars"
+  --octave "mid-to-high (3-5)"
+```
+
+### 3) Interactief
+
+```bash
+python suno_prompt_builder.py
 ```
 
 Plak de output direct in Suno.ai als style prompt.
