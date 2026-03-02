@@ -692,11 +692,12 @@ def main() -> None:
             args.texture or "cold, wide, analog-filmic",
             args.mode or "Cinematic",
         )
-    else:
-        payload = interactive_suno()
+        print("\nOUTPUT (SHORT, SUNO-FRIENDLY):\n")
+        print(build_suno_style_prompt(payload))
+        return
 
-    print("\nOUTPUT (SHORT, SUNO-FRIENDLY):\n")
-    print(build_suno_style_prompt(payload))
+    print("Error: unsupported mode dispatch.")
+    raise SystemExit(2)
 
 
 if __name__ == "__main__":
