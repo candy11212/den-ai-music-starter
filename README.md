@@ -1,38 +1,68 @@
-# Suno.ai Prompt Builder
+# V222 Suno Ultimate Style Prompt Builder
 
-Een professionele **AI prompt builder** voor Suno.ai.
+Deze tool heeft nu **2 modi**:
 
-## Wat is nu echt “AI” aan deze builder?
+1. **Suno mode**: korte, Suno-vriendelijke style prompt met exact jouw gewenste output-structuur.
+2. **Mastering mode**: Bob Ludwig V5 “Universe Mode”-achtige mastering report template.
 
-Deze versie doet meer dan een vaste template:
-- Je geeft alleen een **band/groep** op.
-- De builder gebruikt een **band-profiel analyse** om automatisch stijlvoorstellen te doen (genre, mood, energy, pace, key, octave, vocals, language, theme, production).
-- Je kunt alles nog handmatig overschrijven met flags.
+## Suno mode (kort & direct)
 
-Dus: eerst slimme suggestie op basis van band, daarna controle door jou.
+Verplichte input-logica:
+- emotion
+- genre
+- vocal
+- scene
+- texture
 
-## Gebruik
+Output is altijd kort:
+- STYLE
+- VOCALS
+- INSTRUMENTS
+- TEXTURE
+- SCENE
+- ENHANCER
 
-### 1) Alleen band (AI-suggesties)
+### Builder modes
+- Ballad
+- Cinematic
+- Gothic
+- NDH/Industrial
+- Pop Emotional
+- Dark Electronic
+
+### Voorbeeld
 
 ```bash
-python suno_prompt_builder.py --band "Linkin Park"
+python suno_prompt_builder.py suno \
+  --emotion "angry" \
+  --genre "industrial metal" \
+  --vocal "male deep aggressive" \
+  --scene "abandoned factory at night" \
+  --texture "cold, metallic, wide" \
+  --mode "NDH/Industrial"
 ```
 
-### 2) Band + eigen overrides
+## Mastering mode (V5 report)
+
+Genereert een gestructureerde output met:
+- MASTERING REPORT
+- DETECTION MAP
+- BAND/STYLE DNA
+- MASTERING CHAIN + SETTINGS
+- LOUDNESS & DYNAMICS TARGETS
+- DELIVERY FORMATS
+- END
+
+### Voorbeeld
 
 ```bash
-python suno_prompt_builder.py \
-  --band "Imagine Dragons" \
-  --mood "epic and uplifting" \
-  --key "D minor" \
-  --octave "mid-to-high (3-5)"
+python suno_prompt_builder.py mastering \
+  --track "Dark electronic rock with female lead and heavy sub" \
+  --style "Gothic / Dark Electronic"
 ```
 
-### 3) Interactief
+## Interactief
 
 ```bash
 python suno_prompt_builder.py
 ```
-
-Plak de output direct in Suno.ai als style prompt.
