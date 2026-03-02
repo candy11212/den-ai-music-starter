@@ -683,21 +683,20 @@ def main() -> None:
         print("Error: missing subcommand. Run with a mode (e.g. suno, styleprompt, omega) or no args for interactive mode.")
         raise SystemExit(2)
 
-    if args.command == "suno":
-        payload = SunoInput(
-            args.emotion or "melancholic but powerful",
-            args.genre or "dark cinematic electronic",
-            args.vocal or "female airy lead, emotional intensity",
-            args.scene or "night city rooftop in rain",
-            args.texture or "cold, wide, analog-filmic",
-            args.mode or "Cinematic",
-        )
-        print("\nOUTPUT (SHORT, SUNO-FRIENDLY):\n")
-        print(build_suno_style_prompt(payload))
-        return
+    if args.command != "suno":
+        print("Error: unsupported mode dispatch.")
+        raise SystemExit(2)
 
-    print("Error: unsupported mode dispatch.")
-    raise SystemExit(2)
+    payload = SunoInput(
+        args.emotion or "melancholic but powerful",
+        args.genre or "dark cinematic electronic",
+        args.vocal or "female airy lead, emotional intensity",
+        args.scene or "night city rooftop in rain",
+        args.texture or "cold, wide, analog-filmic",
+        args.mode or "Cinematic",
+    )
+    print("\nOUTPUT (SHORT, SUNO-FRIENDLY):\n")
+    print(build_suno_style_prompt(payload))
 
 
 if __name__ == "__main__":
