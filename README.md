@@ -3,13 +3,17 @@ Starter web app for AI music generation — backend + frontend, job queue, and p
 
 ## Extra tool in deze repo
 
-Naast de starter-app bevat deze repo ook `suno_prompt_builder.py` met 5 CLI-modi:
+Naast de starter-app bevat deze repo ook `suno_prompt_builder.py` met 9 CLI-modi:
 
 1. `suno` → korte Suno-vriendelijke prompt
 2. `mastering` → SENTIVOX/V5 mastering report
 3. `v6-suno` → uitgebreide V6 Suno-analyse
 4. `aurion` → AURION/HYPERSONA V∞ intent-output
 5. `sentivox` → V555 vocal prompt-structuur met vaste secties
+6. `voicebrain` → persona-ontwerp
+7. `arcify` → emotionele zangboog
+8. `lyricmatch` → lyric-intent naar vocal delivery
+9. `abtest` → A/B-vergelijking van vocal approaches
 
 ### V555 SENTIVOX voorbeeld
 

@@ -213,7 +213,49 @@ def build_sentivox_vocal_system(data: SentivoxInput) -> str:
             f"Experimental: {data.vocal_type} + synthetic human blend, broken whispers, wide cinematic",
             "",
             "[SELF-OPTIMIZATION]",
-            "Arc is balanced and Suno-ready. If chorus feels too flat, increase intensity tag from strong to belted and keep delivery as wide cinematic.",
+            "Output is Suno-ready and sectioned. If chorus feels too flat, change 'strong' to 'belted'; if too harsh, replace 'raw upfront' with 'intimate close'.",
+        ]
+    )
+
+
+def build_voicebrain(data: SentivoxInput) -> str:
+    return "\n".join(["[PERSONA]", _infer_persona(data.vocal_type, data.emotion)])
+
+
+def build_arcify(data: SentivoxInput) -> str:
+    return "\n".join(
+        [
+            "[EMOTIONAL ARC]",
+            "intro: fragile",
+            "verse: confessional",
+            "chorus: strong release",
+            "bridge: haunted break",
+            "outro: reflective fade",
+        ]
+    )
+
+
+def build_lyricmatch(data: SentivoxInput, lyrics: str) -> str:
+    return "\n".join(
+        [
+            "[VOCAL MAP]",
+            f"lyric intent: {lyrics.strip() or 'no lyrics supplied'}",
+            f"delivery: {data.vocal_type}, mid-range, {data.emotion}, intimate close",
+            "hook delivery: 8va lift, strong, wide cinematic",
+        ]
+    )
+
+
+def build_abtest(data: SentivoxInput, variant_a: str, variant_b: str) -> str:
+    return "\n".join(
+        [
+            "[ALTERNATIVES]",
+            f"Alt A: {variant_a or (data.vocal_type + ', intimate close, soft')}",
+            f"Alt B: {variant_b or (data.vocal_type + ', reverb distant, haunted')}",
+            "Experimental: synthetic human blend + broken whispers + 8vb bridge",
+            "",
+            "[SELF-OPTIMIZATION]",
+            "Pick A for clarity and lyric focus; pick B for atmosphere and distance.",
         ]
     )
 
@@ -266,11 +308,30 @@ def parse_args() -> argparse.Namespace:
     aurion.add_argument("--vocal-direction", default="")
     aurion.add_argument("--language", default="en")
 
-    sentivox = sub.add_parser("sentivox", help="V555 Conscious Vocalist Designer output")
+    sentivox = sub.add_parser("sentivox", help="/sentivox full vocal system generation")
     sentivox.add_argument("--style", default="dark electronic cinematic")
     sentivox.add_argument("--emotion", default="haunted warmth")
     sentivox.add_argument("--vocal-type", default="androgynous airy clean")
     sentivox.add_argument("--language", default="en")
+
+    voicebrain = sub.add_parser("voicebrain", help="/voicebrain persona creation")
+    voicebrain.add_argument("--emotion", default="haunted warmth")
+    voicebrain.add_argument("--vocal-type", default="androgynous airy clean")
+
+    arcify = sub.add_parser("arcify", help="/arcify emotional arc")
+    arcify.add_argument("--emotion", default="haunted warmth")
+    arcify.add_argument("--vocal-type", default="androgynous airy clean")
+
+    lyricmatch = sub.add_parser("lyricmatch", help="/lyricmatch interpret lyrics into delivery")
+    lyricmatch.add_argument("--emotion", default="haunted warmth")
+    lyricmatch.add_argument("--vocal-type", default="androgynous airy clean")
+    lyricmatch.add_argument("--lyrics", default="")
+
+    abtest = sub.add_parser("abtest", help="/abtest compare two vocal approaches")
+    abtest.add_argument("--emotion", default="haunted warmth")
+    abtest.add_argument("--vocal-type", default="androgynous airy clean")
+    abtest.add_argument("--a", default="")
+    abtest.add_argument("--b", default="")
 
     return parser.parse_args()
 
@@ -296,6 +357,22 @@ def main() -> None:
     if args.command == "sentivox":
         print("\nV555 SENTIVOX — AI CONSCIOUS VOCALIST DESIGNER\n")
         print(build_sentivox_vocal_system(SentivoxInput(args.style, args.emotion, args.vocal_type, args.language)))
+        return
+
+    if args.command == "voicebrain":
+        print(build_voicebrain(SentivoxInput("", args.emotion, args.vocal_type, "en")))
+        return
+
+    if args.command == "arcify":
+        print(build_arcify(SentivoxInput("", args.emotion, args.vocal_type, "en")))
+        return
+
+    if args.command == "lyricmatch":
+        print(build_lyricmatch(SentivoxInput("", args.emotion, args.vocal_type, "en"), args.lyrics))
+        return
+
+    if args.command == "abtest":
+        print(build_abtest(SentivoxInput("", args.emotion, args.vocal_type, "en"), args.a, args.b))
         return
 
     if args.command == "suno":
