@@ -1,36 +1,40 @@
-# V222 Suno Ultimate Style Prompt Builder
+# V222 + BOB LUDWIG V6 Suno Prompt Builder
 
-Deze tool heeft nu **2 modi**:
+Deze tool ondersteunt nu **3 modes**:
 
-1. **Suno mode**: korte, Suno-vriendelijke style prompt met exact jouw gewenste output-structuur.
-2. **Mastering mode**: Bob Ludwig V5 “Universe Mode”-achtige mastering report template.
+1. `suno` → korte Suno-vriendelijke prompt (STYLE/VOCALS/INSTRUMENTS/TEXTURE/SCENE/ENHANCER)
+2. `mastering` → V5 mastering report
+3. `v6-suno` → uitgebreide V6 Suno-analyse met 9 vaste outputsecties
 
-## Suno mode (kort & direct)
+## Nieuwe mode: v6-suno
 
-Verplichte input-logica:
-- emotion
-- genre
-- vocal
-- scene
-- texture
+De `v6-suno` mode volgt je notecardstructuur:
+1. SUNO PROMPT (Copy-Paste Ready)
+2. GENRE BREAKDOWN
+3. EMOTIONAL ARCHITECTURE
+4. VOCAL DIRECTION
+5. SCENE & ATMOSPHERE
+6. MIX GUIDANCE
+7. PRODUCTION NOTES
+8. ALTERNATIVE VARIATIONS
+9. FINAL SUNO TAGS (Master Version)
 
-Output is altijd kort:
-- STYLE
-- VOCALS
-- INSTRUMENTS
-- TEXTURE
-- SCENE
-- ENHANCER
-
-### Builder modes
-- Ballad
-- Cinematic
-- Gothic
-- NDH/Industrial
-- Pop Emotional
-- Dark Electronic
+Daarnaast wordt basis conflict-filtering toegepast (bijv. `happy` + `melancholic`, `lo-fi` + `hi-fi`) en tag-reductie naar max 10 tags.
 
 ### Voorbeeld
+
+```bash
+python suno_prompt_builder.py v6-suno \
+  --genre "dark techno" \
+  --subgenre "industrial techno" \
+  --emotion "melancholic" \
+  --vocal "ethereal female vocals" \
+  --scene "neon-lit rainy night" \
+  --mix-style "wide stereo" \
+  --production "modern production"
+```
+
+## Bestaande korte Suno mode
 
 ```bash
 python suno_prompt_builder.py suno \
@@ -42,27 +46,10 @@ python suno_prompt_builder.py suno \
   --mode "NDH/Industrial"
 ```
 
-## Mastering mode (V5 report)
-
-Genereert een gestructureerde output met:
-- MASTERING REPORT
-- DETECTION MAP
-- BAND/STYLE DNA
-- MASTERING CHAIN + SETTINGS
-- LOUDNESS & DYNAMICS TARGETS
-- DELIVERY FORMATS
-- END
-
-### Voorbeeld
+## Mastering mode
 
 ```bash
 python suno_prompt_builder.py mastering \
   --track "Dark electronic rock with female lead and heavy sub" \
   --style "Gothic / Dark Electronic"
-```
-
-## Interactief
-
-```bash
-python suno_prompt_builder.py
 ```

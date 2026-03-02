@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""V222 Suno Ultimate Style Prompt Builder + Bob Ludwig V5 report generator."""
+"""V222 Suno builder + Bob Ludwig V6 Suno mode helpers."""
 
 from __future__ import annotations
 
@@ -34,6 +34,14 @@ MODE_ENHANCERS = {
     "Dark Electronic": "tempo delay + saturation",
 }
 
+CONFLICTS = [
+    ("happy", "melancholic"),
+    ("ambient", "aggressive"),
+    ("lo-fi", "hi-fi"),
+    ("intimate", "epic"),
+    ("calm", "intense"),
+]
+
 
 @dataclass
 class SunoInput:
@@ -43,6 +51,17 @@ class SunoInput:
     scene: str
     texture: str
     mode: str
+
+
+@dataclass
+class V6Input:
+    genre: str
+    subgenre: str
+    emotion: str
+    vocal: str
+    scene: str
+    mix_style: str
+    production: str
 
 
 def build_suno_style_prompt(data: SunoInput) -> str:
@@ -90,6 +109,85 @@ def build_mastering_report(track_desc: str, style_hint: str) -> str:
     )
 
 
+def normalize_tags(tags: list[str], max_tags: int = 10) -> list[str]:
+    seen: set[str] = set()
+    cleaned: list[str] = []
+    for tag in tags:
+        t = tag.strip().lower()
+        if not t or t in seen:
+            continue
+        seen.add(t)
+        cleaned.append(t)
+
+    for a, b in CONFLICTS:
+        if a in cleaned and b in cleaned:
+            cleaned.remove(b)
+
+    return cleaned[:max_tags]
+
+
+def build_v6_analysis(data: V6Input) -> str:
+    tags = normalize_tags(
+        [
+            data.genre,
+            data.subgenre,
+            data.emotion,
+            data.vocal,
+            data.scene,
+            data.mix_style,
+            data.production,
+        ],
+        max_tags=10,
+    )
+    tag_line = ", ".join(tags)
+    primary_genre = tags[0] if tags else data.genre
+    return "\n".join(
+        [
+            "1. SUNO PROMPT (Copy-Paste Ready)",
+            tag_line,
+            "2. GENRE BREAKDOWN",
+            f"Primary Genre: {primary_genre}",
+            f"Subgenre: {data.subgenre}",
+            f"Influences: {data.mix_style}",
+            f"Era: {data.production}",
+            "3. EMOTIONAL ARCHITECTURE",
+            f"Primary Emotion: {data.emotion}",
+            "Secondary Emotion: cinematic tension",
+            "Intensity: 7/10",
+            "Emotional Arc: intro tension -> melodic lift -> emotional release",
+            "4. VOCAL DIRECTION",
+            f"Gender/Type: {data.vocal}",
+            "Timbre: dark/airy (as requested)",
+            "Delivery: emotional",
+            "Register: mixed",
+            "Emotional Quality: intimate but powerful",
+            "5. SCENE & ATMOSPHERE",
+            f"Primary Scene: {data.scene}",
+            "Mood: immersive and visual",
+            "Spatial Characteristics: controlled depth, clear center",
+            "Visual Elements: cinematic light/shadow contrast",
+            "Temporal Setting: night",
+            "6. MIX GUIDANCE",
+            f"Stereo Width: {data.mix_style}",
+            "Reverb/Depth: scene-matched",
+            "Texture: balanced clarity + character",
+            "Energy Level: moderate to intense",
+            "Density: layered but readable",
+            "7. PRODUCTION NOTES",
+            f"Era/Style: {data.production}",
+            "Key Elements: strong hook + clear vocal identity",
+            "Technical Focus: low-end control, vocal clarity, top-end polish",
+            "Avoid: conflicting tags, overloading beyond 12 tags",
+            "8. ALTERNATIVE VARIATIONS",
+            f"Version A: {', '.join(normalize_tags([data.genre, data.emotion, data.vocal, data.scene, 'reverb-heavy']))}",
+            f"Version B: {', '.join(normalize_tags([data.genre, data.subgenre, data.vocal, data.mix_style, data.production]))}",
+            f"Version C: {', '.join(normalize_tags([data.genre, data.emotion, data.vocal, data.scene]))}",
+            "9. FINAL SUNO TAGS (Master Version)",
+            tag_line,
+        ]
+    )
+
+
 def ask(question: str, default: str) -> str:
     raw = input(f"{question} [{default}]: ").strip()
     return raw or default
@@ -109,7 +207,7 @@ def interactive_suno() -> SunoInput:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="V222 Suno Builder + Bob Ludwig V5 report mode")
+    parser = argparse.ArgumentParser(description="V222 Suno Builder + Bob Ludwig V6 Suno mode")
     sub = parser.add_subparsers(dest="command")
 
     suno = sub.add_parser("suno", help="Generate short Suno-friendly style prompt")
@@ -120,9 +218,18 @@ def parse_args() -> argparse.Namespace:
     suno.add_argument("--texture")
     suno.add_argument("--mode", choices=SUNO_MODES)
 
-    master = sub.add_parser("mastering", help="Generate Bob Ludwig V5-style mastering report")
+    master = sub.add_parser("mastering", help="Generate V5-style mastering report")
     master.add_argument("--track", default="User-described track")
     master.add_argument("--style", default="Hybrid modern")
+
+    v6 = sub.add_parser("v6-suno", help="Generate full V6 Suno analysis output")
+    v6.add_argument("--genre", default="dark techno")
+    v6.add_argument("--subgenre", default="industrial techno")
+    v6.add_argument("--emotion", default="melancholic")
+    v6.add_argument("--vocal", default="female vocals")
+    v6.add_argument("--scene", default="neon-lit rainy night")
+    v6.add_argument("--mix-style", default="wide stereo")
+    v6.add_argument("--production", default="modern production")
 
     return parser.parse_args()
 
@@ -133,6 +240,20 @@ def main() -> None:
     if args.command == "mastering":
         print("\nBOB LUDWIG MASTERING ENGINE — V5 'UNIVERSE MODE'\n")
         print(build_mastering_report(args.track, args.style))
+        return
+
+    if args.command == "v6-suno":
+        payload = V6Input(
+            genre=args.genre,
+            subgenre=args.subgenre,
+            emotion=args.emotion,
+            vocal=args.vocal,
+            scene=args.scene,
+            mix_style=args.mix_style,
+            production=args.production,
+        )
+        print("\nBOB LUDWIG MASTERING ENGINE — V6 'SUNO MODE'\n")
+        print(build_v6_analysis(payload))
         return
 
     if args.command == "suno":
