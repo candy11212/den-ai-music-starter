@@ -1,27 +1,34 @@
-# V222 + BOB LUDWIG V6 Suno Prompt Builder
+# V222 + SENTIVOX + AURION Suno Prompt Builder
 
-Deze tool ondersteunt nu **3 modes**:
+Deze tool ondersteunt nu **4 modes**:
 
 1. `suno` → korte Suno-vriendelijke prompt (STYLE/VOCALS/INSTRUMENTS/TEXTURE/SCENE/ENHANCER)
-2. `mastering` → V5 mastering report
+2. `mastering` → SENTIVOX/V5 mastering report
 3. `v6-suno` → uitgebreide V6 Suno-analyse met 9 vaste outputsecties
+4. `aurion` → AURION/HYPERSONA V∞ output in exact 5-delig format
 
-## Nieuwe mode: v6-suno
+## Nieuwe mode: aurion
 
-De `v6-suno` mode volgt je notecardstructuur:
-1. SUNO PROMPT (Copy-Paste Ready)
-2. GENRE BREAKDOWN
-3. EMOTIONAL ARCHITECTURE
-4. VOCAL DIRECTION
-5. SCENE & ATMOSPHERE
-6. MIX GUIDANCE
-7. PRODUCTION NOTES
-8. ALTERNATIVE VARIATIONS
-9. FINAL SUNO TAGS (Master Version)
+`aurion` volgt exact deze structuur:
+1) EMOTION CORE
+2) SONIC REALM / ATMOSPHERE
+3) STYLE SIGNATURE
+4) VOCAL DIRECTION (OF “INSTRUMENTAAL”)
+5) LYRICS SEED (OPTIONEEL MAAR AANGERADEN)
 
-Daarnaast wordt basis conflict-filtering toegepast (bijv. `happy` + `melancholic`, `lo-fi` + `hi-fi`) en tag-reductie naar max 10 tags.
+Deze mode blijft creatief en Suno-gericht, zonder technische masteringtermen.
 
 ### Voorbeeld
+
+```bash
+python suno_prompt_builder.py aurion \
+  --description "female vocal, glitchy synthwave, post-love, cinematic night" \
+  --style-hint "glitchy synthwave × melancholic pop met cinematic rand" \
+  --vocal-direction "Breathy, intieme female vocal met zachte melancholie" \
+  --language "en"
+```
+
+## v6-suno mode
 
 ```bash
 python suno_prompt_builder.py v6-suno \
@@ -34,7 +41,7 @@ python suno_prompt_builder.py v6-suno \
   --production "modern production"
 ```
 
-## Bestaande korte Suno mode
+## korte suno mode
 
 ```bash
 python suno_prompt_builder.py suno \
@@ -46,7 +53,7 @@ python suno_prompt_builder.py suno \
   --mode "NDH/Industrial"
 ```
 
-## Mastering mode
+## mastering mode
 
 ```bash
 python suno_prompt_builder.py mastering \

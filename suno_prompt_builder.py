@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""V222 Suno builder + Bob Ludwig V6 Suno mode helpers."""
+"""V222 builder with Suno-focused persona outputs (AURION + SENTIVOX)."""
 
 from __future__ import annotations
 
@@ -62,6 +62,14 @@ class V6Input:
     scene: str
     mix_style: str
     production: str
+
+
+@dataclass
+class AurionInput:
+    description: str
+    style_hint: str
+    vocal_direction: str
+    language: str
 
 
 def build_suno_style_prompt(data: SunoInput) -> str:
@@ -188,6 +196,50 @@ def build_v6_analysis(data: V6Input) -> str:
     )
 
 
+def _style_signature(style_hint: str, description: str) -> str:
+    if style_hint:
+        return style_hint
+    text = description.lower()
+    if "glitch" in text and "synth" in text:
+        return "glitchy synthwave × melancholic pop met cinematic rand"
+    if "trap" in text and "ambient" in text:
+        return "dark ambient trap × cinematic urban gloom"
+    return "cinematic electronic × emotional alt-pop"
+
+
+def build_aurion_prompt(data: AurionInput) -> str:
+    signature = _style_signature(data.style_hint, data.description)
+    emotion_core = "Bittersweet spanning tussen verlies en hoop, met een onderlaag van nachtelijke introspectie."
+    sonic = (
+        "Een filmische wereld van neon-schaduw, zachte mist en pulserende ruimte. "
+        "Warme pads botsen met koude digitale details zodat het tegelijk menselijk en futuristisch voelt. "
+        "De track moet bewegen als een verhaal: rustig begin, oplopende spanning, emotionele release."
+    )
+    vocal = data.vocal_direction or "Androgyne, intieme vocal met breekbare emotie en duidelijke presence."
+    lyrics_en = "Neon rain keeps calling my name\nI hold the static like a flame\nYour ghost is dancing in the blue\nI lose the night, I find the truth"
+    lyrics_nl = "Neonregen fluistert zacht mijn naam\nIk draag het stil zijn als een vlam\nJouw schaduw beweegt nog door de straat\nTot ik in donker licht besta"
+    lyrics = lyrics_nl if data.language.lower().startswith("nl") else lyrics_en
+
+    return "\n".join(
+        [
+            "1) EMOTION CORE",
+            emotion_core,
+            "",
+            "2) SONIC REALM / ATMOSPHERE",
+            sonic,
+            "",
+            "3) STYLE SIGNATURE",
+            signature,
+            "",
+            "4) VOCAL DIRECTION (OF “INSTRUMENTAAL”)",
+            vocal,
+            "",
+            "5) LYRICS SEED (OPTIONEEL MAAR AANGERADEN)",
+            lyrics,
+        ]
+    )
+
+
 def ask(question: str, default: str) -> str:
     raw = input(f"{question} [{default}]: ").strip()
     return raw or default
@@ -207,7 +259,7 @@ def interactive_suno() -> SunoInput:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="V222 Suno Builder + Bob Ludwig V6 Suno mode")
+    parser = argparse.ArgumentParser(description="V222 builder with AURION/HYPERSONA and SENTIVOX modes")
     sub = parser.add_subparsers(dest="command")
 
     suno = sub.add_parser("suno", help="Generate short Suno-friendly style prompt")
@@ -218,7 +270,7 @@ def parse_args() -> argparse.Namespace:
     suno.add_argument("--texture")
     suno.add_argument("--mode", choices=SUNO_MODES)
 
-    master = sub.add_parser("mastering", help="Generate V5-style mastering report")
+    master = sub.add_parser("mastering", help="Generate SENTIVOX/V5-style mastering report")
     master.add_argument("--track", default="User-described track")
     master.add_argument("--style", default="Hybrid modern")
 
@@ -231,6 +283,12 @@ def parse_args() -> argparse.Namespace:
     v6.add_argument("--mix-style", default="wide stereo")
     v6.add_argument("--production", default="modern production")
 
+    aurion = sub.add_parser("aurion", help="Generate AURION/HYPERSONA V∞ Suno intent output")
+    aurion.add_argument("--description", default="glitchy synthwave, post-love, cinematic night")
+    aurion.add_argument("--style-hint", default="")
+    aurion.add_argument("--vocal-direction", default="")
+    aurion.add_argument("--language", default="en")
+
     return parser.parse_args()
 
 
@@ -238,7 +296,7 @@ def main() -> None:
     args = parse_args()
 
     if args.command == "mastering":
-        print("\nBOB LUDWIG MASTERING ENGINE — V5 'UNIVERSE MODE'\n")
+        print("\nSENTIVOX ENGINE V555 — MASTERING OUTPUT\n")
         print(build_mastering_report(args.track, args.style))
         return
 
@@ -254,6 +312,17 @@ def main() -> None:
         )
         print("\nBOB LUDWIG MASTERING ENGINE — V6 'SUNO MODE'\n")
         print(build_v6_analysis(payload))
+        return
+
+    if args.command == "aurion":
+        payload = AurionInput(
+            description=args.description,
+            style_hint=args.style_hint,
+            vocal_direction=args.vocal_direction,
+            language=args.language,
+        )
+        print("\nAURION/HYPERSONA V∞ — SUNO AUDIO INTENT\n")
+        print(build_aurion_prompt(payload))
         return
 
     if args.command == "suno":
