@@ -347,6 +347,7 @@ def build_sentivox_vocal_system(data: SentivoxInput) -> str:
         [
             "[PERSONA]",
             persona,
+            f"style context: {data.style}",
             "",
             "[EMOTIONAL ARC]",
             "intro: restrained tension",
@@ -361,6 +362,9 @@ def build_sentivox_vocal_system(data: SentivoxInput) -> str:
             f"chorus → {data.vocal_type}, 8va lift, haunted warmth, strong, wide cinematic",
             f"bridge → {data.vocal_type}, 8vb drop, broken fragile, mid, reverb distant",
             f"outro → {data.vocal_type}, mid-range, nostalgic courage, soft, hazy atmospheric",
+            "",
+            "[STYLE CONTEXT]",
+            data.style,
             "",
             "[ALTERNATIVES]",
             f"Alt: {data.vocal_type}, warm chest, soft → strong arc, intimate close",
@@ -447,7 +451,12 @@ def build_omega_system_output(data: OmegaInput) -> str:
         else "[Verse 1]\nNeon valt als regen op mijn naam\nTijd breekt open maar ik blijf bestaan\n\n[Pre-Chorus]\nAls de nacht verscheurt, hou ik licht nog vast\n\n[Chorus]\nIk adem door ruis, ik gloei door de regen\nIk laat jou los, maar niet mijn zegen\n\n[Verse 2]\nGlazen schaduwen zeggen wat we waren\nStadshart klopt door alle jaren\n\n[Bridge]\nIn de breuk leerde ik opnieuw te beginnen\n\n[Chorus - Reprise]\nIk adem door ruis, ik gloei door de regen\nIk laat jou los, maar niet mijn zegen"
     )
 
-    meta_truth = "Het lied gaat over helen zonder te vergeten: verlies wordt geen einde maar een richting." 
+    if data.language.lower().startswith('nl'):
+        meta_truth = "Het lied gaat over helen zonder te vergeten: verlies wordt geen einde maar een richting."
+    elif data.language.lower().startswith('de'):
+        meta_truth = "Das Lied handelt vom Heilen ohne zu vergessen: Verlust wird kein Ende, sondern eine Richtung."
+    else:
+        meta_truth = "The song is about healing without forgetting: loss becomes not an ending but a direction."
 
     mixboard = "\n".join([
         f"Vocals: Soul Type=Moonlit Thread; Zone=Heartline; Texture=Silk saturation; Spatial=Intimate close -> cinematic width; Character={data.vocal}",
@@ -473,6 +482,7 @@ def build_omega_system_output(data: OmegaInput) -> str:
         f"Emotion Curve: {emotion_curve}",
         f"Symbolic Set: {symbols}",
         f"Vocal Soul: {vocal_soul}",
+        f"Tempo: {data.tempo}",
         f"Lyrics (Suno-ready):\n{lyrics}",
         f"Meta-Truth: {meta_truth}",
         "",
