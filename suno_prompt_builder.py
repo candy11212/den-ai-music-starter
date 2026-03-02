@@ -66,6 +66,14 @@ class SentivoxInput:
     language: str
 
 
+@dataclass
+class ProducerInput:
+    texture: str
+    instruments: str
+    energy_curve: str
+    mix_direction: str
+
+
 def build_suno_style_prompt(data: SunoInput) -> str:
     return "\n".join(
         [
@@ -82,18 +90,23 @@ def build_suno_style_prompt(data: SunoInput) -> str:
 def build_mastering_report(track_desc: str, style_hint: str) -> str:
     return "\n".join(
         [
-            "MASTERING REPORT",
-            "DETECTION MAP",
+            "SENTIVOX MASTERPLAN",
+            "🎛 Chain settings",
+            "- EQ: gentle tonal sculpt based on emotion target",
+            "- Compression: glue + vocal-presence control",
+            "- Limiting: controlled loudness with preserved transients",
+            "💓 Emotion map",
+            "- Lows: grounded weight",
+            "- Mids: narrative/intimacy focus",
+            "- Highs: air and emotional lift",
+            "🧬 Profile match",
             f"- Source description: {track_desc}",
-            "- Micro scan: transients, phase, resonance, stereo drift",
-            "BAND/STYLE DNA",
             f"- Style hint: {style_hint}",
-            "MASTERING CHAIN + SETTINGS",
-            "1) Reality Scan  2) Analog Sculpt  3) Digital Precision  4) Limiting",
-            "LOUDNESS & DYNAMICS TARGETS",
-            "- Streaming: -9 to -12 LUFS, -1.0 dBTP",
-            "DELIVERY FORMATS",
-            "- CD / Streaming / Vinyl / Audiophile",
+            "📦 Export presets",
+            "- Streaming: balanced loudness + true-peak safety",
+            "- Vinyl: wider dynamics, softer limiting",
+            "- TikTok/Shorts: forward mids + clear hook presence",
+            "- AI-feed stems: clean separated print for reuse",
             "END",
         ]
     )
@@ -260,6 +273,24 @@ def build_abtest(data: SentivoxInput, variant_a: str, variant_b: str) -> str:
     )
 
 
+def build_producer_direction(data: ProducerInput) -> str:
+    return "\n".join(
+        [
+            "V222 PRODUCER DIRECTION",
+            "ARRANGEMENT:",
+            "intro airy setup -> verse detail -> pre-chorus lift -> wide chorus -> bridge contrast -> final release",
+            "SOUND DESIGN:",
+            data.instruments,
+            "ENERGY CURVE:",
+            data.energy_curve,
+            "TEXTURE & TONE:",
+            data.texture,
+            "PRODUCTION:",
+            f"{data.texture}, {data.instruments}, {data.energy_curve}, {data.mix_direction}",
+        ]
+    )
+
+
 def ask(question: str, default: str) -> str:
     raw = input(f"{question} [{default}]: ").strip()
     return raw or default
@@ -333,6 +364,12 @@ def parse_args() -> argparse.Namespace:
     abtest.add_argument("--a", default="")
     abtest.add_argument("--b", default="")
 
+    producer = sub.add_parser("producer", help="V222 producer direction output")
+    producer.add_argument("--texture", default="warm velvet + fog atmosphere")
+    producer.add_argument("--instruments", default="warm analog keys, deep bass, emotional pads, soft piano")
+    producer.add_argument("--energy-curve", default="slow emotional rise with cinematic peak")
+    producer.add_argument("--mix-direction", default="wide cinematic mix, vocal-forward center")
+
     return parser.parse_args()
 
 
@@ -373,6 +410,10 @@ def main() -> None:
 
     if args.command == "abtest":
         print(build_abtest(SentivoxInput("", args.emotion, args.vocal_type, "en"), args.a, args.b))
+        return
+
+    if args.command == "producer":
+        print(build_producer_direction(ProducerInput(args.texture, args.instruments, args.energy_curve, args.mix_direction)))
         return
 
     if args.command == "suno":
