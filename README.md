@@ -3,19 +3,27 @@ Starter web app for AI music generation — backend + frontend, job queue, and p
 
 ## Extra tool in deze repo
 
-Naast de starter-app bevat deze repo ook `suno_prompt_builder.py` met 4 CLI-modi:
+Naast de starter-app bevat deze repo ook `suno_prompt_builder.py` met 5 CLI-modi:
 
 1. `suno` → korte Suno-vriendelijke prompt
 2. `mastering` → SENTIVOX/V5 mastering report
 3. `v6-suno` → uitgebreide V6 Suno-analyse
 4. `aurion` → AURION/HYPERSONA V∞ intent-output
+5. `sentivox` → V555 vocal prompt-structuur met vaste secties
 
-### Voorbeeld
+### V555 SENTIVOX voorbeeld
 
 ```bash
-python suno_prompt_builder.py aurion \
-  --description "female vocal, glitchy synthwave, post-love, cinematic night" \
-  --style-hint "glitchy synthwave × melancholic pop met cinematic rand" \
-  --vocal-direction "Breathy, intieme female vocal met zachte melancholie" \
+python suno_prompt_builder.py sentivox \
+  --style "dark electronic cinematic" \
+  --emotion "haunted warmth" \
+  --vocal-type "androgynous airy clean" \
   --language "en"
 ```
+
+De `sentivox` output gebruikt altijd:
+- `[PERSONA]`
+- `[EMOTIONAL ARC]`
+- `[VOCAL MAP]`
+- `[ALTERNATIVES]`
+- `[SELF-OPTIMIZATION]`
