@@ -402,50 +402,53 @@ def build_producer_direction(data: ProducerInput) -> str:
 
 
 def build_omega_system_output(data: OmegaInput) -> str:
-    aurion = build_aurion_prompt(
-        AurionInput(
-            description=f"{data.mood}, {data.style}, {data.image}",
-            style_hint=f"{data.style} met {data.emotion} emotionele kern",
-            vocal_direction=f"{data.vocal}, emotie: {data.emotion}, tempo-feel: {data.tempo}",
-            language=data.language,
-        )
+    world = f"{data.mood}; visual frame: {data.image}; style context: {data.style}"
+    emotion_curve = f"Shadow -> Pulse -> Glow ({data.emotion})"
+    symbols = "Mist, Neon, Time, Glass, Echo, Pulse"
+    vocal_soul = f"{data.vocal}; distance: intimate-to-mid; texture: silk+glitch; delivery: fragile but determined"
+
+    lyrics = (
+        "[Verse 1]\nNeon drips down the wires of my name\nTime keeps breaking but I stay the same\n\n[Pre-Chorus]\nIf the night unthreads, I still hold the light\n\n[Chorus]\nI breathe through static, I glow through rain\nI lose your shadow, I keep your flame\n\n[Verse 2]\nGlass reflections whisper what we were\nCity-heart beats like a distant blur\n\n[Bridge]\nIn the fracture I found a way to begin\n\n[Chorus - Reprise]\nI breathe through static, I glow through rain\nI lose your shadow, I keep your flame"
+        if not data.language.lower().startswith('nl')
+        else "[Verse 1]\nNeon valt als regen op mijn naam\nTijd breekt open maar ik blijf bestaan\n\n[Pre-Chorus]\nAls de nacht verscheurt, hou ik licht nog vast\n\n[Chorus]\nIk adem door ruis, ik gloei door de regen\nIk laat jou los, maar niet mijn zegen\n\n[Verse 2]\nGlazen schaduwen zeggen wat we waren\nStadshart klopt door alle jaren\n\n[Bridge]\nIn de breuk leerde ik opnieuw te beginnen\n\n[Chorus - Reprise]\nIk adem door ruis, ik gloei door de regen\nIk laat jou los, maar niet mijn zegen"
     )
-    mixboard = "\n".join(
-        [
-            "V∞ OMEGA MIXBOARD",
-            f"Celestial: shine layer shaped by {data.mood}",
-            f"Heartline: mid emotional core driven by {data.emotion}",
-            f"Sub Foundation: bass gravity matched to {data.tempo}",
-            f"Vocal Shape: {data.vocal}",
-            f"Texture Direction: {data.style}",
-            f"Image Translation: {data.image}",
-        ]
-    )
-    sentivox = build_mastering_report(
-        track_desc=f"{data.style} / {data.mood} / {data.emotion}",
-        style_hint=f"Export intent: {data.export_goal}",
-    )
-    return "\n".join(
-        [
-            "OMEGA MUSIC SYSTEM — COMPLETE OUTPUT",
-            "1) AURION WORLD + LYRICS",
-            aurion,
-            "",
-            "2) OMEGA MIXBOARD ARCHITECTURE",
-            mixboard,
-            "",
-            "3) SENTIVOX CONCEPTUAL MASTERING",
-            sentivox,
-            "",
-            "4) OMEGA SUMMARY",
-            f"Mood: {data.mood}",
-            f"Emotion Curve: Shadow -> Glow ({data.emotion})",
-            f"Style: {data.style}",
-            f"Vocal Soul: {data.vocal}",
-            f"Visual Frame: {data.image}",
-            f"Export Goal: {data.export_goal}",
-        ]
-    )
+
+    meta_truth = "Het lied gaat over helen zonder te vergeten: verlies wordt geen einde maar een richting." 
+
+    mixboard = "\n".join([
+        f"Vocals: Soul Type=Moonlit Thread; Zone=Heartline; Texture=Silk saturation; Spatial=Intimate close -> cinematic width; Character={data.vocal}",
+        "Synths: Archetype=Fracture Halo; Zone=Celestial+Heartline; Texture=Neon grain + glitch; Function=Lead theme + pad bed",
+        "Drums: Character=Vapor Pulse + Hollow Kick; Zone=Sub Foundation+Heartline; Groove=stumble-glide; Impact=Cinematic punch",
+        "Guitars: Flow Type=Lightbeam Fade; FX=Delay glide + reverb bloom; Role=Emotional counterline",
+        "Bass: Soul Type=Sub Pulse; Zone=Sub Foundation; Texture=Warm floor with subtle grit",
+        "Atmos: Source=Rain + city hum + static; Placement=super wide/back; Movement=slow drift",
+    ])
+
+    sentivox = "\n".join([
+        f"Emotion Scan: {data.emotion}; label=haunting resolve",
+        "LUFS: Streaming -13 to -10 LUFS; Film/Atmos -18 to -14 LUFS (more dynamic depth)",
+        "EQ: Air lift for shimmer, gentle presence focus, light mud control, warm body support",
+        "Stereo: Vocal center/intimate, synths wide, drums medium-wide, atmos ultra-wide",
+        "Dynamics: Soft glue compression with breathing sidechain movement",
+        f"Export Notes: {data.export_goal}; keep translation strong on small speakers and preserve narrative clarity",
+    ])
+
+    return "\n".join([
+        "[ AURION OUTPUT ]",
+        f"World: {world}",
+        f"Emotion Curve: {emotion_curve}",
+        f"Symbolic Set: {symbols}",
+        f"Vocal Soul: {vocal_soul}",
+        f"Lyrics (Suno-ready):\n{lyrics}",
+        f"Meta-Truth: {meta_truth}",
+        "",
+        "[ OMEGA MIXBOARD ]",
+        mixboard,
+        "",
+        "[ SENTIVOX MASTER ]",
+        sentivox,
+    ])
+
 
 def ask(question: str, default: str) -> str:
     raw = input(f"{question} [{default}]: ").strip()

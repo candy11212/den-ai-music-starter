@@ -48,3 +48,9 @@ python suno_prompt_builder.py omega \
   --image "time-fracture skyline in rain" \
   --export-goal "streaming + storytelling"
 ```
+
+
+OMEGA output format:
+- [ AURION OUTPUT ]
+- [ OMEGA MIXBOARD ]
+- [ SENTIVOX MASTER ]
