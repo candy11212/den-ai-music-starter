@@ -74,6 +74,102 @@ class ProducerInput:
     mix_direction: str
 
 
+@dataclass
+class SongwriterInput:
+    emotion: str
+    scene: str
+    vocal: str
+    theme: str
+    language: str
+
+
+def build_songwriter_report(data: SongwriterInput) -> str:
+    lyrics_en = """[Verse 1]
+In the rain-lit glass I hear your name
+Neon halos burn, but not the same
+I keep the pieces where the streetlights fade
+Learning how to hold the mess we made
+
+[Pre-Chorus]
+If the night breaks open, I will stay
+With a fragile fire that won’t decay
+
+[Chorus]
+I rise through the dark with a trembling spark
+Melancholic hope in a city of scars
+You were the wound, now you’re the sign
+I lost your hand, but I found my light
+
+[Verse 2]
+Cathedral echoes in the underpass
+Old ghosts flicker in a mirror’s glass
+Every silence taught me how to breathe
+Every ending gave me room to be
+
+[Bridge]
+No perfect halo, no clean goodbye
+Just human thunder under midnight sky
+
+[Final Chorus]
+I rise through the dark with a trembling spark
+Melancholic hope in a city of scars
+You were the wound, now you’re the sign
+I lost your hand, but I found my light"""
+
+    lyrics_nl = """[Verse 1]
+In natte ramen hoor ik nog je naam
+Neon brandt, maar nooit meer hetzelfde raam
+Ik draag de scherven waar de straat stil wordt
+En leer te leven met wat ooit kapot was
+
+[Pre-Chorus]
+Als de nacht me breekt, blijf ik nog staan
+Met een kleine vlam die niet wil gaan
+
+[Chorus]
+Ik stijg uit het donker met een trillend hart
+Melancholische hoop in een stad vol barst
+Jij was de wond, nu ben je het teken
+Ik liet je los, maar ik ben niet gebroken
+
+[Verse 2]
+Kerkklanken dwalen door beton en mist
+Oude schaduwen in een raam dat wist
+Elke stilte leerde mij weer adem
+Elke val gaf ruimte om te dragen
+
+[Bridge]
+Geen heilige lijn, geen nette pijn
+Alleen menselijk onweer onder maanlicht schijn
+
+[Final Chorus]
+Ik stijg uit het donker met een trillend hart
+Melancholische hoop in een stad vol barst
+Jij was de wond, nu ben je het teken
+Ik liet je los, maar ik ben niet gebroken"""
+
+    lyrics = lyrics_nl if data.language.lower().startswith('nl') else lyrics_en
+
+    return "\n".join([
+        "1. SONG CREATION REPORT",
+        f"Theme: {data.theme}",
+        "2. Emotional Genesis",
+        f"Primary: {data.emotion}; Secondary: melancholic hope; Hidden: quiet resilience",
+        "3. Scene & Atmosphere",
+        f"Scene: {data.scene}; tone: cinematic, intimate, night-driven",
+        "4. Vocal Direction",
+        f"Vocal narrative DNA: {data.vocal}; performance arc: soft -> strong -> broken -> release",
+        "5. Symbolic Motifs",
+        "rain, neon, shadows, heart-fire, echo, night-city",
+        "6. Full Lyrics (Suno-ready)",
+        lyrics,
+        "7. V222 Style Prompt (max 1–3 regels)",
+        f"cinematic emotional pop, {data.emotion}, {data.vocal}, {data.scene}, symbolic rain-and-neon imagery",
+        "8. Meta-Story Summary",
+        "A love-wound transforms into identity: the narrator moves from fracture to grounded hope without losing emotional depth.",
+    ])
+
+
 def build_suno_style_prompt(data: SunoInput) -> str:
     return "\n".join(
         [
@@ -370,6 +466,14 @@ def parse_args() -> argparse.Namespace:
     producer.add_argument("--energy-curve", default="slow emotional rise with cinematic peak")
     producer.add_argument("--mix-direction", default="wide cinematic mix, vocal-forward center")
 
+
+    songwriter = sub.add_parser("songwriter", help="V222 songwriter full reality-architect output")
+    songwriter.add_argument("--emotion", default="melancholic hope")
+    songwriter.add_argument("--scene", default="neon rainy city")
+    songwriter.add_argument("--vocal", default="androgynous intimate lead")
+    songwriter.add_argument("--theme", default="post-love recovery")
+    songwriter.add_argument("--language", default="en")
+
     return parser.parse_args()
 
 
@@ -414,6 +518,11 @@ def main() -> None:
 
     if args.command == "producer":
         print(build_producer_direction(ProducerInput(args.texture, args.instruments, args.energy_curve, args.mix_direction)))
+        return
+
+
+    if args.command == "songwriter":
+        print(build_songwriter_report(SongwriterInput(args.emotion, args.scene, args.vocal, args.theme, args.language)))
         return
 
     if args.command == "suno":
